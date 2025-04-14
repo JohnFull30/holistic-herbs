@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ name, price, image }) => (
@@ -42,9 +41,9 @@ const ProductCard = ({ name, price, image }) => (
         variant="outlined"
         color="success"
         component={Link}
-        to={`/shop/${name}`}
+        to={`/learn/${name}`}
       >
-        View Details
+        Learn More
       </Button>
       <Button size="small" variant="contained" color="success">
         Add to Cart

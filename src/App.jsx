@@ -8,6 +8,8 @@ import Learn from "./pages/Learn";
 import ProductDetails from "./pages/ProductDetails"; // New page
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
+import HerbInfo from './pages/HerbInfo';
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
             <Route path="/shop" element={<Shop />} />
             <Route path="/learn" element={<Learn />} />
             <Route path="/shop/:productId" element={<ProductDetails />} /> {/* New route */}
+            <Route path="/learn/:herbName" element={<HerbInfo />} />
           </Routes>
         </Box>
       </Container>
