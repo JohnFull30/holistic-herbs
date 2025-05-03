@@ -14,7 +14,8 @@ const Navbar = () => (
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
         <LocalFloristIcon fontSize="large" />
-        <Typography variant="h6">Holistic Herbs</Typography>
+        <Typography variant="h6" color="inherit" component={Link}
+        to={`/`}>Holistic Herbs</Typography>
       </Box>
       <Box>
         <Button color="inherit" component={Link} to="/learn">Learn</Button>

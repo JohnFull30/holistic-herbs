@@ -1,26 +1,21 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "Deploy Holistic Herbs",
-        "type": "shell",
-        "command": "./deploy.sh",
-        "args": [],
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        },
-        "presentation": {
-          "echo": true,
-          "reveal": "always",
-          "focus": true,
-          "panel": "shared"
-        },
-        "options": {
-          "cwd": "${workspaceFolder}"
-        }
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run choose-script",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/choose-script.sh",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
       }
-    ]
-  }
-  
+    }
+  ]
+}
