@@ -24,18 +24,18 @@ const Navbar = () => {
       }}
     >
       <Toolbar sx={{ justifyContent: 'space-between', px: 3 }}>
-        <Button component={Link} to="/shop" color="inherit">
+        <Button sx={{ fontWeight: 'bold' }} component={Link} to="/shop" color="inherit">
           Shop
         </Button>
 
         <IconButton component={Link} to="/" color="inherit">
           <LocalFloristIcon fontSize="large" />
-          <Typography variant="h6" sx={{ ml: 1, fontWeight: 500 }}>
+          <Typography variant="h6"  sx={{ ml: 1, fontWeight: 500 }}>
             Holistic Herbs
           </Typography>
         </IconButton>
 
-        <Button component={Link} to="/learn" color="inherit">
+        <Button sx={{ fontWeight: 'bold' }} component={Link} to="/learn" color="inherit">
           Learn
         </Button>
       </Toolbar>

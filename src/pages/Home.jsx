@@ -60,7 +60,7 @@ const Home = () => (
             <Button
               component={Link}
               to="/learn"
-              variant="outlined"
+              variant="contained"
               size="large"
               sx={{ borderWidth: 2, color: '#fff', borderColor: '#fff' }}
             >
