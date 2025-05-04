@@ -10,9 +10,26 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import HerbInfo from './pages/HerbInfo';
 
+import { ThemeProvider, createTheme } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme({
+  palette: {
+    primary: { main: '#2e7d32' },           // deep green
+    secondary: { main: '#a5d6a7' },         // soft mint
+    background: { default: '#fafafa' },     // light grey
+  },
+  typography: {
+    h2: { fontWeight: 700, fontSize: '3rem', letterSpacing: '-1px' },
+    h5: { color: '#555' },
+  },
+});
+
 
 function App() {
   return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
     <Router>
       <Navbar />
       <Container maxWidth="lg">
@@ -28,6 +45,8 @@ function App() {
       </Container>
       <Footer />
     </Router>
+    </ThemeProvider>
+  
   );
 }
 

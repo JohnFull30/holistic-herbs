@@ -1,27 +1,46 @@
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
+// src/components/Navbar.jsx
+import { AppBar, Toolbar, IconButton, Typography, Button } from '@mui/material';
+import { useLocation, Link } from 'react-router-dom';
 import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
-import { Link } from 'react-router-dom';
 
-const Navbar = () => (
-  <AppBar position="static" color="success">
-    <Toolbar sx={{ justifyContent: 'space-between' }}>
-      <Box>
-        <Button color="inherit" component={Link} to="/shop">Shop</Button>
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-        <LocalFloristIcon fontSize="large" />
-        <Typography variant="h6" color="inherit" component={Link}
-        to={`/`}>Holistic Herbs</Typography>
-      </Box>
-      <Box>
-        <Button color="inherit" component={Link} to="/learn">Learn</Button>
-      </Box>
-    </Toolbar>
-  </AppBar>
-);
+const Navbar = () => {
+  const { pathname } = useLocation();
+  // Solid navbar on both /shop and /learn
+  const isSolid = pathname.startsWith('/shop') || pathname.startsWith('/learn');
+
+  return (
+    <AppBar
+      position="fixed"
+      elevation={isSolid ? 4 : 0}
+      sx={{
+        bgcolor: isSolid
+          ? 'rgba(255,255,255,0.95)' // white-ish on Shop & Learn
+          : 'transparent',           // transparent elsewhere
+        color: isSolid
+          ? 'primary.main'           // green links on white bg
+          : '#fff',                  // white links on transparent bg
+        backdropFilter: 'blur(10px)',
+        zIndex: theme => theme.zIndex.drawer + 1,
+      }}
+    >
+      <Toolbar sx={{ justifyContent: 'space-between', px: 3 }}>
+        <Button component={Link} to="/shop" color="inherit">
+          Shop
+        </Button>
+
+        <IconButton component={Link} to="/" color="inherit">
+          <LocalFloristIcon fontSize="large" />
+          <Typography variant="h6" sx={{ ml: 1, fontWeight: 500 }}>
+            Holistic Herbs
+          </Typography>
+        </IconButton>
+
+        <Button component={Link} to="/learn" color="inherit">
+          Learn
+        </Button>
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 export default Navbar;

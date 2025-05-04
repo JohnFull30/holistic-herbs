@@ -1,15 +1,78 @@
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+// src/pages/Home.jsx
+import { Box, Typography, Stack, Button, Container } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Home = () => (
-  <Box sx={{ textAlign: 'center', my: 4 }}>
-    <Typography variant="h3" gutterBottom>
-      Welcome to Holistic Herbs
-    </Typography>
-    <Typography variant="body1">
-      Explore our finest herbs and essential oils.
-    </Typography>
-  </Box>
+  <>
+    {/* 1) Fixed background layer */}
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundImage: `url(${process.env.PUBLIC_URL}/images/herb-hero.jpg)`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        zIndex: -1,             // sit behind everything
+      }}
+    />
+
+    {/* 2) Your actual page content */}
+    <Container disableGutters maxWidth={false} sx={{ minHeight: '100vh' }}>
+      {/* Hero section (still full-screen, but now over the fixed BG) */}
+      <Box
+        component="section"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+        }}
+      >
+        <Container
+          maxWidth="md"
+          sx={{
+            textAlign: 'center',
+            color: '#fff',
+            textShadow: '0 2px 6px rgba(0,0,0,0.6)',
+          }}
+        >
+          <Typography variant="h2" gutterBottom>
+            Welcome to Holistic Herbs
+          </Typography>
+          <Typography variant="h5" paragraph>
+            Explore our finest herbs and essential oils.
+          </Typography>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <Button
+              component={Link}
+              to="/shop"
+              variant="contained"
+              size="large"
+              sx={{ px: 4 }}
+            >
+              Shop Now
+            </Button>
+            <Button
+              component={Link}
+              to="/learn"
+              variant="outlined"
+              size="large"
+              sx={{ borderWidth: 2, color: '#fff', borderColor: '#fff' }}
+            >
+              Learn More
+            </Button>
+          </Stack>
+        </Container>
+      </Box>
+
+      {/* …other page sections go here (they’ll scroll over the fixed bg) */}
+    </Container>
+  </>
 );
 
 export default Home;
