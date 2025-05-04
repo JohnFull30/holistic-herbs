@@ -16,7 +16,7 @@ const Footer = () => (
   >
     <Container maxWidth="lg" sx={{ textAlign: 'center' }}>
       <Typography variant="body2">
-        © 2025 Holistic Herbs
+        © 2025 Holistic Herbss
       </Typography>
       <Stack direction="row" spacing={3} justifyContent="center">
         <Link href="/privacy" color="inherit" underline="hover">
