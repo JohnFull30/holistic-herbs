@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/holistic-herbs/static/css/main.2efa84eb.css",
-    "main.js": "/holistic-herbs/static/js/main.574cb083.js",
+    "main.css": "/holistic-herbs/static/css/main.3223139c.css",
+    "main.js": "/holistic-herbs/static/js/main.a0809865.js",
     "static/js/453.801dc4f7.chunk.js": "/holistic-herbs/static/js/453.801dc4f7.chunk.js",
     "index.html": "/holistic-herbs/index.html",
-    "main.2efa84eb.css.map": "/holistic-herbs/static/css/main.2efa84eb.css.map",
-    "main.574cb083.js.map": "/holistic-herbs/static/js/main.574cb083.js.map",
+    "main.3223139c.css.map": "/holistic-herbs/static/css/main.3223139c.css.map",
+    "main.a0809865.js.map": "/holistic-herbs/static/js/main.a0809865.js.map",
     "453.801dc4f7.chunk.js.map": "/holistic-herbs/static/js/453.801dc4f7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2efa84eb.css",
-    "static/js/main.574cb083.js"
+    "static/css/main.3223139c.css",
+    "static/js/main.a0809865.js"
   ]
 }
