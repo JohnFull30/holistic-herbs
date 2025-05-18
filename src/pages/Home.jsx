@@ -12,7 +12,7 @@ const Home = () => (
         left: 0,
         width: '100vw',
         height: '100vh',
-        backgroundImage: `url(${process.env.PUBLIC_URL}/images/herb-hero.jpg)`,
+        backgroundImage: `url(${process.env.PUBLIC_URL}/images/herb-hero2.jpg)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -22,7 +22,16 @@ const Home = () => (
     />
 
     {/* 2) Your actual page content */}
-    <Container disableGutters maxWidth={false} sx={{ minHeight: '100vh' }}>
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{
+        minHeight: '100vh',
+        overflow: 'hidden', // Prevents overfill/scrollbars
+        boxSizing: 'border-box',
+        p: 0, // Remove default padding
+      }}
+    >
       {/* Hero section (still full-screen, but now over the fixed BG) */}
       <Box
         component="section"

@@ -3,6 +3,11 @@
 }
 
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 
 .App-logo {
   height: 40vmin;
@@ -28,6 +33,14 @@
 
 .App-link {
   color: #61dafb;
+}
+
+/* Prevent overfill globally */
+body, #root {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 @keyframes App-logo-spin {

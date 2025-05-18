@@ -6,7 +6,7 @@ import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
 const Navbar = () => {
   const { pathname } = useLocation();
   // Solid navbar on both /shop and /learn
-  const isSolid = pathname.startsWith('/shop') || pathname.startsWith('/learn');
+  const isSolid = ['/shop', '/learn', '/herbs'].some(prefix => pathname.startsWith(prefix));
 
   return (
     <AppBar

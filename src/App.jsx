@@ -9,6 +9,9 @@ import ProductDetails from "./pages/ProductDetails"; // New page
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import HerbInfo from './pages/HerbInfo';
+import HerbLibrary from './pages/HerbLibrary';
+import HerbDetail from './pages/HerbDetail';
+import './App.css';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -33,13 +36,17 @@ function App() {
     <Router>
       <Navbar />
       <Container maxWidth="lg">
-        <Box sx={{ my: 4 }}>
+        <Box sx={{ pt: { xs: 8, sm: 10 } }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/learn" element={<Learn />} />
             <Route path="/shop/:productId" element={<ProductDetails />} /> {/* New route */}
             <Route path="/learn/:herbName" element={<HerbInfo />} />
+            <Route path="/herbs" element={<HerbLibrary />} />
+            <Route path="/herbs/:herbId" element={<HerbDetail />} />
+
+
           </Routes>
         </Box>
       </Container>

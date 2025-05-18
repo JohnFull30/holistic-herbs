@@ -3,6 +3,11 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
+import { Link } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
+
+
 
 // Mock product data (ideally fetched from backend/API)
 const products = [
@@ -52,6 +57,8 @@ const products = [
 
 const ProductDetails = () => {
   const { productId } = useParams();
+  const navigate = useNavigate();
+
   const product = products.find(p => p.name === productId);
 
   if (!product) {
@@ -63,7 +70,18 @@ const ProductDetails = () => {
   }
 
   return (
+    
     <Box sx={{ maxWidth: 800, mx: 'auto', textAlign: 'center', my: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+      <Button
+          onClick={() => navigate(-1)}
+          variant="text"
+          startIcon={<ArrowBackIcon />}
+          sx={{ mb: 2, textTransform: 'none', color: 'success.main' }}
+        >
+          Back
+          </Button>
+          </Box>
       <Typography variant="h4" gutterBottom>{product.name}</Typography>
       <CardMedia
         component="img"
@@ -75,7 +93,40 @@ const ProductDetails = () => {
         ${product.price}
       </Typography>
       <Typography variant="body1" paragraph>{product.description}</Typography>
-      <Button variant="contained" color="success">Add to Cart</Button>
+      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
+  <Button
+    component={Link}
+    to={`/learn/${encodeURIComponent(product.name)}`}
+    variant="outlined"
+    color="success"
+    sx={{
+      px: 3,
+      py: 1.25,
+      borderRadius: '999px',
+      fontWeight: 500,
+      textTransform: 'uppercase',
+    }}
+  >
+    Learn Healing Benefits
+  </Button>
+  <Button
+    variant="contained"
+    color="success"
+    sx={{
+      px: 3,
+      py: 1.25,
+      borderRadius: '999px',
+      fontWeight: 500,
+      textTransform: 'uppercase',
+    '&:hover': {
+      backgroundColor: '#1b5e20', // slightly darker green
+    },
+    }}
+  >
+    Add to Cart
+  </Button>
+</Box>
+
     </Box>
   );
 };
