@@ -53,9 +53,23 @@ const Home = () => (
           <Typography variant="h2" gutterBottom>
             Welcome to Holistic Herbs
           </Typography>
-          <Typography variant="h5" paragraph>
+          <Typography
+            variant="h5"
+            paragraph
+            sx={{
+              color: '#f1f8e9',
+              fontWeight: 300,
+              fontSize: { xs: '1.125rem', sm: '1.25rem' },
+              lineHeight: 1.7,
+              textShadow: '0 2px 4px rgba(0,0,0,0.7)',
+              maxWidth: 700,
+              mx: 'auto',
+              mb: 4,
+            }}
+          >
             Explore our finest herbs and essential oils.
           </Typography>
+
           <Stack direction="row" spacing={2} justifyContent="center">
             <Button
               component={Link}
