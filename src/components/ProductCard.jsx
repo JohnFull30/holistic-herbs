@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-const ProductCard = ({ name, price, image }) => (
+const ProductCard = ({ name, price, image_url }) => (
   <Box sx={{ position: 'relative' }}>
     {/* Wrap only the product card in the Link */}
     <Card
@@ -20,7 +20,7 @@ const ProductCard = ({ name, price, image }) => (
     '&:hover': { boxShadow: 6 }
   }}
 >
-  <CardMedia component="img" height="240" image={image} alt={name} />
+  <CardMedia component="img" height="240" image={image_url} alt={name} />
   <CardContent sx={{ textAlign: 'center' }}> {/* 👈 Center content here */}
     <Typography gutterBottom variant="h6">
       {name}
