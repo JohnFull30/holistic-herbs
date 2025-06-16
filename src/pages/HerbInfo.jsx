@@ -1,30 +1,42 @@
+// src/pages/HerbInfo.jsx
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Typography, Box, CardMedia, Divider, Button } from '@mui/material';
+import { Typography, Box, CardMedia, Divider, Button, CircularProgress } from '@mui/material';
 import { supabase } from '../supabaseClient';
 
 const HerbInfo = () => {
   const { herbName } = useParams();
   const navigate = useNavigate();
   const [herb, setHerb] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchHerb() {
       const { data, error } = await supabase
-        .from('products')
+        .from('herbs')
         .select('*')
-        .eq('name', herbName)
+        .ilike('name', herbName)
         .single();
 
       if (error) {
         console.error('Error fetching herb info:', error);
+        setHerb(null);
       } else {
         setHerb(data);
       }
+      setLoading(false);
     }
 
     fetchHerb();
   }, [herbName]);
+
+  if (loading) {
+    return (
+      <Box sx={{ textAlign: 'center', mt: 10 }}>
+        <CircularProgress color="success" />
+      </Box>
+    );
+  }
 
   if (!herb) {
     return (

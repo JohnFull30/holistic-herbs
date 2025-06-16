@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import HerbInfo from './pages/HerbInfo';
 import HerbLibrary from './pages/HerbLibrary';
 import HerbDetail from './pages/HerbDetail';
+import AddHerbForm from './pages/AddHerbForm';
 import './App.css';
 
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -45,6 +46,8 @@ function App() {
             <Route path="/learn/:herbName" element={<HerbInfo />} />
             <Route path="/herbs" element={<HerbLibrary />} />
             <Route path="/herbs/:herbId" element={<HerbDetail />} />
+            <Route path="/admin/add-herb" element={<AddHerbForm />} />
+
 
 
           </Routes>
