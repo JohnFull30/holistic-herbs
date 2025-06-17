@@ -10,25 +10,31 @@ const HerbInfo = () => {
   const [herb, setHerb] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchHerb() {
-      const { data, error } = await supabase
-        .from('herbs')
-        .select('*')
-        .ilike('name', herbName)
-        .single();
+ useEffect(() => {
+  async function fetchHerb() {
+    const decodedSlug = decodeURIComponent(herbName);
+    console.log('🔍 Querying herb with slug:', decodedSlug);
 
-      if (error) {
-        console.error('Error fetching herb info:', error);
-        setHerb(null);
-      } else {
-        setHerb(data);
-      }
-      setLoading(false);
+    const { data, error } = await supabase
+      .from('herbs')
+      .select('*')
+      .eq('slug', decodedSlug)
+      .limit(1);
+
+    if (error) {
+      console.error('❌ Supabase error:', error);
+      setHerb(null);
+    } else {
+      console.log('✅ Herb response:', data);
+      setHerb(data?.[0] || null);
     }
 
-    fetchHerb();
-  }, [herbName]);
+    setLoading(false);
+  }
+
+  fetchHerb();
+}, [herbName]);
+
 
   if (loading) {
     return (

@@ -17,7 +17,7 @@ const ProductDetails = () => {
     async function fetchProduct() {
       const { data, error } = await supabase
         .from('products')
-        .select('*')
+        .select('id, name, price, image_url, description, herb_slug') // ✅ get herb_slug
         .eq('name', productId)
         .single();
 
@@ -65,7 +65,7 @@ const ProductDetails = () => {
       <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
         <Button
           component={Link}
-          to={`/learn/${encodeURIComponent(product.name)}`}
+          to={`/learn/${product.herb_slug}`} // ✅ FIXED routing
           variant="outlined"
           color="success"
           sx={{
