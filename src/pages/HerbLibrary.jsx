@@ -1,58 +1,54 @@
-// src/pages/HerbLibrary.jsx
-import { useState } from 'react';
-import { Box, Typography, Grid, TextField, Button, Card, CardMedia, CardContent } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import herbs from '../data/herbs';
-
+import { Box, Grid, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import { supabase } from '../supabaseClient';
 
 const HerbLibrary = () => {
-  const [search, setSearch] = useState("");
+  const [herbs, setHerbs] = useState([]);
 
-  const filteredHerbs = herbs.filter(h =>
-    h.name.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    async function fetchHerbs() {
+      const { data, error } = await supabase.from('herbs').select('*');
+      if (error) {
+        console.error('Error fetching herbs:', error);
+      } else {
+        setHerbs(data);
+      }
+    }
 
-  const letters = [...new Set(herbs.map(h => h.name[0].toUpperCase()))].sort();
+    fetchHerbs();
+  }, []);
 
   return (
-    <Box sx={{ p: 4, pt: 12 }}>
+    <Box sx={{ px: 2, py: 5 }}>
       <Typography variant="h3" align="center" gutterBottom>
         Herb Library
       </Typography>
-
-      <Box sx={{ maxWidth: 500, mx: 'auto', mb: 3 }}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Search Herbs..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{ borderRadius: '50px', bgcolor: 'white' }}
-        />
-      </Box>
-
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', mb: 4 }}>
-        {letters.map(letter => (
-          <Button
-            key={letter}
-            href={`#${letter}`}
-            size="small"
-            sx={{ m: 0.5 }}
-          >
-            {letter}
-          </Button>
-        ))}
-      </Box>
-
-      <Grid container spacing={3}>
-        {filteredHerbs.map(herb => (
-          <Grid item xs={12} sm={6} md={4} key={herb.id} id={herb.name[0].toUpperCase()}>
-            <Card component={Link} to={`/herbs/${encodeURIComponent(herb.slug)}`} sx={{ textDecoration: 'none', boxShadow: 3, '&:hover': { boxShadow: 6 } }}>
-              <CardMedia component="img" height="200" image={herb.image} alt={herb.name} />
+      <Grid container spacing={4} justifyContent="center">
+        {herbs.map((herb) => (
+          <Grid item key={herb.id} xs={12} sm={6} md={4}>
+            <Card
+              component={Link}
+              to={`/learn/${herb.slug}`}
+              sx={{
+                textDecoration: 'none',
+                color: 'inherit',
+                transition: '0.3s',
+                '&:hover': { boxShadow: 6 }
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="200"
+                image={herb.image_url || 'https://placehold.co/400x400?text=No+Image'}
+                alt={herb.name}
+              />
               <CardContent>
-                <Typography variant="h6" fontWeight="bold">{herb.name}</Typography>
+                <Typography variant="h6" gutterBottom>
+                  {herb.name}
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {herb.description}
+                  {herb.description || 'No description available.'}
                 </Typography>
               </CardContent>
             </Card>

@@ -1,104 +1,139 @@
 import { useState } from 'react';
-import { Box, TextField, Button, Typography, Alert } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 import { supabase } from '../supabaseClient';
 
+const generateSlug = (text) =>
+  text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
 const AddHerbForm = () => {
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: '',
     image_url: '',
     healing_benefits: '',
     recipe: '',
-    facts: ''
+    facts: '',
   });
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccess(false);
-    setError(null);
+    const slug = generateSlug(formData.name);
 
-    const { data, error } = await supabase.from('products').insert([form]);
+    const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
+    const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
+    const { error } = await supabase.from('herbs').insert([
+      { ...formData, slug },
+    ]);
 
     if (error) {
       console.error(error);
-      setError(error.message);
+      setError('Failed to add herb.');
     } else {
       setSuccess(true);
-      setForm({
+      setFormData({
         name: '',
         image_url: '',
         healing_benefits: '',
         recipe: '',
-        facts: ''
+        facts: '',
       });
     }
   };
 
   return (
-    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 10 }}>
-      <Typography variant="h4" gutterBottom>Add New Herb</Typography>
-
-      {success && <Alert severity="success">Herb added successfully!</Alert>}
-      {error && <Alert severity="error">{error}</Alert>}
-
+    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 5 }}>
+      <Typography variant="h4" gutterBottom>
+        Add New Herb
+      </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
-          fullWidth
-          label="Name"
+          label="Herb Name"
           name="name"
-          value={form.name}
+          value={formData.name}
           onChange={handleChange}
-          margin="normal"
+          fullWidth
           required
+          sx={{ mb: 2 }}
         />
         <TextField
-          fullWidth
           label="Image URL"
           name="image_url"
-          value={form.image_url}
+          value={formData.image_url}
           onChange={handleChange}
-          margin="normal"
+          fullWidth
+          required
+          sx={{ mb: 2 }}
         />
         <TextField
-          fullWidth
           label="Healing Benefits"
           name="healing_benefits"
-          value={form.healing_benefits}
+          value={formData.healing_benefits}
           onChange={handleChange}
-          margin="normal"
+          fullWidth
           multiline
           rows={3}
+          required
+          sx={{ mb: 2 }}
         />
         <TextField
-          fullWidth
-          label="Recipe"
+          label="Holistic Recipe"
           name="recipe"
-          value={form.recipe}
+          value={formData.recipe}
           onChange={handleChange}
-          margin="normal"
+          fullWidth
           multiline
           rows={3}
+          required
+          sx={{ mb: 2 }}
         />
         <TextField
-          fullWidth
-          label="Facts"
+          label="Helpful Facts"
           name="facts"
-          value={form.facts}
+          value={formData.facts}
           onChange={handleChange}
-          margin="normal"
+          fullWidth
           multiline
           rows={3}
+          required
+          sx={{ mb: 2 }}
         />
-
-        <Button type="submit" variant="contained" color="success" sx={{ mt: 2 }}>
+        <Button variant="contained" color="success" type="submit">
           Add Herb
         </Button>
       </form>
+
+      <Snackbar
+        open={success}
+        autoHideDuration={3000}
+        onClose={() => setSuccess(false)}
+      >
+        <Alert severity="success" onClose={() => setSuccess(false)}>
+          Herb added successfully!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={!!error}
+        autoHideDuration={3000}
+        onClose={() => setError('')}
+      >
+        <Alert severity="error" onClose={() => setError('')}>
+          {error}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
