@@ -8,6 +8,7 @@ import {
   Alert,
 } from '@mui/material';
 import { supabase } from '../supabaseClient';
+import { Link } from 'react-router-dom';
 
 const generateSlug = (text) =>
   text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -30,9 +31,6 @@ const AddHerbForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const slug = generateSlug(formData.name);
-
-    const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-    const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 
     const { error } = await supabase.from('herbs').insert([
       { ...formData, slug },
@@ -110,9 +108,20 @@ const AddHerbForm = () => {
           required
           sx={{ mb: 2 }}
         />
-        <Button variant="contained" color="success" type="submit">
-          Add Herb
-        </Button>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+          <Button
+            component={Link}
+            to="/admin/herbs"
+            variant="outlined"
+            color="primary"
+          >
+            ← Back to Dashboard
+          </Button>
+          <Button type="submit" variant="contained" color="success">
+            Add Herb
+          </Button>
+        </Box>
       </form>
 
       <Snackbar

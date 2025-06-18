@@ -13,6 +13,8 @@ import HerbLibrary from './pages/HerbLibrary';
 import HerbDetail from './pages/HerbDetail';
 import AddHerbForm from './pages/AddHerbForm';
 import './App.css';
+import HerbDashboard from './pages/HerbDashboard';
+
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -47,6 +49,8 @@ function App() {
             <Route path="/herbs" element={<HerbLibrary />} />
             <Route path="/herbs/:herbId" element={<HerbDetail />} />
             <Route path="/admin/add-herb" element={<AddHerbForm />} />
+            <Route path="/admin/herbs" element={<HerbDashboard />} />
+
 
 
 

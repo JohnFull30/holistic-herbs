@@ -1,54 +1,60 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Grid, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Grid, TextField, Typography, Card, CardMedia, CardContent, Button } from '@mui/material';
 import { supabase } from '../supabaseClient';
+import { Link } from 'react-router-dom';
 
 const HerbLibrary = () => {
   const [herbs, setHerbs] = useState([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
-    async function fetchHerbs() {
+    const fetchHerbs = async () => {
       const { data, error } = await supabase.from('herbs').select('*');
-      if (error) {
-        console.error('Error fetching herbs:', error);
-      } else {
+      if (data) {
         setHerbs(data);
+      } else {
+        console.error(error);
       }
-    }
-
+    };
     fetchHerbs();
   }, []);
 
+  const filteredHerbs = herbs.filter((herb) =>
+    herb.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <Box sx={{ px: 2, py: 5 }}>
-      <Typography variant="h3" align="center" gutterBottom>
-        Herb Library
-      </Typography>
-      <Grid container spacing={4} justifyContent="center">
-        {herbs.map((herb) => (
-          <Grid item key={herb.id} xs={12} sm={6} md={4}>
-            <Card
-              component={Link}
-              to={`/learn/${herb.slug}`}
-              sx={{
-                textDecoration: 'none',
-                color: 'inherit',
-                transition: '0.3s',
-                '&:hover': { boxShadow: 6 }
-              }}
-            >
+    <Box sx={{ px: 2, py: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4">Herb Library</Typography>
+        <Button component={Link} to="/admin/herbs" variant="outlined" color="secondary">
+          Admin Herb Dashboard
+        </Button>
+      </Box>
+
+      <TextField
+        fullWidth
+        label="Search Herbs..."
+        variant="outlined"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        sx={{ mb: 4 }}
+      />
+
+      <Grid container spacing={2}>
+        {filteredHerbs.map((herb) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={herb.id}>
+            <Card component={Link} to={`/learn/${herb.slug}`} sx={{ textDecoration: 'none' }}>
               <CardMedia
                 component="img"
-                height="200"
-                image={herb.image_url || 'https://placehold.co/400x400?text=No+Image'}
+                height="140"
+                image={herb.image_url}
                 alt={herb.name}
               />
               <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {herb.name}
-                </Typography>
+                <Typography variant="h6">{herb.name}</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {herb.description || 'No description available.'}
+                  {herb.description || "No description available."}
                 </Typography>
               </CardContent>
             </Card>
