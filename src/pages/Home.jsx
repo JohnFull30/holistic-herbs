@@ -1,23 +1,23 @@
 // src/pages/Home.jsx
-import { Box, Typography, Stack, Button, Container } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box, Typography, Stack, Button, Container } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Home = () => (
   <>
     {/* 1) Fixed background layer */}
     <Box
       sx={{
-        position: 'fixed',
+        position: "fixed",
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh',
+        width: "100vw",
+        height: "100vh",
         backgroundImage: `url(${process.env.PUBLIC_URL}/images/herb-hero2.jpg)`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        zIndex: -1,             // sit behind everything
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+        zIndex: -1, // sit behind everything
       }}
     />
 
@@ -26,9 +26,9 @@ const Home = () => (
       disableGutters
       maxWidth={false}
       sx={{
-        minHeight: '100vh',
-        overflow: 'hidden', // Prevents overfill/scrollbars
-        boxSizing: 'border-box',
+        minHeight: "100vh",
+        overflow: "hidden", // Prevents overfill/scrollbars
+        boxSizing: "border-box",
         p: 0, // Remove default padding
       }}
     >
@@ -36,18 +36,18 @@ const Home = () => (
       <Box
         component="section"
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
         }}
       >
         <Container
           maxWidth="md"
           sx={{
-            textAlign: 'center',
-            color: '#fff',
-            textShadow: '0 2px 6px rgba(0,0,0,0.6)',
+            textAlign: "center",
+            color: "#fff",
+            textShadow: "0 2px 6px rgba(0,0,0,0.6)",
           }}
         >
           <Typography variant="h2" gutterBottom>
@@ -57,13 +57,13 @@ const Home = () => (
             variant="h5"
             paragraph
             sx={{
-              color: '#f1f8e9',
+              color: "#f1f8e9",
               fontWeight: 300,
-              fontSize: { xs: '1.125rem', sm: '1.25rem' },
+              fontSize: { xs: "1.125rem", sm: "1.25rem" },
               lineHeight: 1.7,
-              textShadow: '0 2px 4px rgba(0,0,0,0.7)',
+              textShadow: "0 2px 4px rgba(0,0,0,0.7)",
               maxWidth: 700,
-              mx: 'auto',
+              mx: "auto",
               mb: 4,
             }}
           >
@@ -85,7 +85,7 @@ const Home = () => (
               to="/learn"
               variant="contained"
               size="large"
-              sx={{ borderWidth: 2, color: '#fff', borderColor: '#fff' }}
+              sx={{ borderWidth: 2, color: "#fff", borderColor: "#fff" }}
             >
               Learn More
             </Button>

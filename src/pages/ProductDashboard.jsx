@@ -30,56 +30,99 @@ const generateSlug = (text) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-const HerbDashboard = () => {
-  const [herbs, setHerbs] = useState([]);
+const ProductDashboard = () => {
+  const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [editingHerb, setEditingHerb] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null);
   const [editForm, setEditForm] = useState({
     name: "",
     image_url: "",
-    healing_benefits: "",
-    recipe: "",
-    facts: "",
+    price: "",
+    description: "",
     slug: "",
+    fulfillment_link: "",
   });
 
-  const fetchHerbs = async () => {
-    const { data, error } = await supabase.from("herbs").select("*");
-    if (error) setError("Failed to fetch herbs");
-    else setHerbs(data);
-  };
-
-  useEffect(() => {
-    fetchHerbs();
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this herb?")) return;
-    const { error } = await supabase.from("herbs").delete().eq("id", id);
-    if (error) setError("Delete failed");
-    else {
-      setSuccess("Herb deleted");
-      fetchHerbs();
+  const fetchProducts = async () => {
+    const { data, error } = await supabase.from("products").select("*");
+    if (error) {
+      console.error(error);
+      setError("Failed to fetch products");
+    } else {
+      setProducts(data);
     }
   };
 
-  const handleEditClick = (herb) => {
-    setEditingHerb(herb);
-    setEditForm({ ...herb });
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleDelete = async (id) => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this product?",
+    );
+    if (!confirm) return;
+
+    const { error } = await supabase.from("products").delete().eq("id", id);
+    if (error) {
+      console.error(error);
+      setError("Delete failed");
+    } else {
+      setSuccess("Product deleted");
+      fetchProducts();
+    }
+  };
+
+  const handleEditClick = (product) => {
+    setEditingProduct(product);
+    setEditForm({
+      name: product.name,
+      slug: product.slug,
+      image_url: product.image_url,
+      price: product.price.toString(),
+      description: product.description,
+      fulfillment_link: product.fulfillment_link || "",
+    });
   };
 
   const handleEditSave = async () => {
-    const slug = generateSlug(editForm.name);
+    const slug = editForm.slug || generateSlug(editForm.name);
+    const parsedPrice = parseFloat(editForm.price);
+
+    console.log("Saving product with:", {
+      name: editForm.name,
+      slug,
+      image_url: editForm.image_url,
+      price: parsedPrice,
+      description: editForm.description,
+      fulfillment_link: editForm.fulfillment_link || null,
+    });
+
+    if (isNaN(parsedPrice)) {
+      setError("Invalid price. Please enter a valid number.");
+      return;
+    }
+
     const { error } = await supabase
-      .from("herbs")
-      .update({ ...editForm, slug })
-      .eq("id", editingHerb.id);
-    if (error) setError("Update failed");
-    else {
-      setSuccess("Herb updated");
-      setEditingHerb(null);
-      fetchHerbs();
+      .from("products")
+      .update({
+        name: editForm.name,
+        slug,
+        image_url: editForm.image_url,
+        price: parsedPrice,
+        description: editForm.description,
+        fulfillment_link: editForm.fulfillment_link || null,
+      })
+      .eq("id", editingProduct.id);
+
+    if (error) {
+      console.error(error);
+      setError("Update failed");
+    } else {
+      setSuccess("Product updated");
+      setEditingProduct(null);
+      fetchProducts();
     }
   };
 
@@ -87,26 +130,26 @@ const HerbDashboard = () => {
     <Box sx={{ maxWidth: "90%", mx: "auto", mt: 5 }}>
       <Button
         component={Link}
-        to="/herbs"
+        to="/shop"
         variant="outlined"
         color="primary"
         sx={{ mb: 2 }}
       >
-        ← Back to Herb Library
+        ← Back to Shop
       </Button>
 
       <Typography variant="h4" gutterBottom>
-        Herb Admin Dashboard
+        Product Admin Dashboard
       </Typography>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
         <Button
           component={Link}
-          to="/admin/add-herb"
+          to="/admin/add-product"
           variant="outlined"
           color="success"
         >
-          + Add New Herb
+          + Add New Product
         </Button>
       </Box>
 
@@ -116,28 +159,30 @@ const HerbDashboard = () => {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Slug</TableCell>
+              <TableCell>Price</TableCell>
               <TableCell>Image</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {herbs.map((herb) => (
-              <TableRow key={herb.id}>
-                <TableCell>{herb.name}</TableCell>
-                <TableCell>{herb.slug}</TableCell>
+            {products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.slug}</TableCell>
+                <TableCell>${product.price}</TableCell>
                 <TableCell>
-                  <img src={herb.image_url} alt={herb.name} height="40" />
+                  <img src={product.image_url} alt={product.name} height="40" />
                 </TableCell>
                 <TableCell>
                   <IconButton
                     color="success"
-                    onClick={() => handleEditClick(herb)}
+                    onClick={() => handleEditClick(product)}
                   >
                     <EditIcon />
                   </IconButton>
                   <IconButton
                     color="error"
-                    onClick={() => handleDelete(herb.id)}
+                    onClick={() => handleDelete(product.id)}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -164,8 +209,8 @@ const HerbDashboard = () => {
         <Alert severity="success">{success}</Alert>
       </Snackbar>
 
-      <Dialog open={!!editingHerb} onClose={() => setEditingHerb(null)}>
-        <DialogTitle>Edit Herb</DialogTitle>
+      <Dialog open={!!editingProduct} onClose={() => setEditingProduct(null)}>
+        <DialogTitle>Edit Product</DialogTitle>
         <DialogContent>
           <TextField
             label="Name"
@@ -174,6 +219,12 @@ const HerbDashboard = () => {
             fullWidth
             sx={{ mb: 1 }}
           />
+          <Typography
+            variant="caption"
+            sx={{ color: "gray", mb: 2, display: "block" }}
+          >
+            Slug: {generateSlug(editForm.name)}
+          </Typography>
           <TextField
             label="Image URL"
             value={editForm.image_url}
@@ -184,10 +235,19 @@ const HerbDashboard = () => {
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Healing Benefits"
-            value={editForm.healing_benefits}
+            label="Price"
+            value={editForm.price}
             onChange={(e) =>
-              setEditForm({ ...editForm, healing_benefits: e.target.value })
+              setEditForm({ ...editForm, price: e.target.value })
+            }
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Description"
+            value={editForm.description}
+            onChange={(e) =>
+              setEditForm({ ...editForm, description: e.target.value })
             }
             fullWidth
             multiline
@@ -195,29 +255,16 @@ const HerbDashboard = () => {
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Recipe"
-            value={editForm.recipe}
+            label="Fulfillment Link"
+            value={editForm.fulfillment_link}
             onChange={(e) =>
-              setEditForm({ ...editForm, recipe: e.target.value })
+              setEditForm({ ...editForm, fulfillment_link: e.target.value })
             }
             fullWidth
-            multiline
-            rows={3}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Facts"
-            value={editForm.facts}
-            onChange={(e) =>
-              setEditForm({ ...editForm, facts: e.target.value })
-            }
-            fullWidth
-            multiline
-            rows={3}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEditingHerb(null)}>Cancel</Button>
+          <Button onClick={() => setEditingProduct(null)}>Cancel</Button>
           <Button onClick={handleEditSave} variant="contained" color="success">
             Save
           </Button>
@@ -227,4 +274,4 @@ const HerbDashboard = () => {
   );
 };
 
-export default HerbDashboard;
+export default ProductDashboard;

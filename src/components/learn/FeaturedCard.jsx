@@ -1,8 +1,22 @@
-import { Card, CardMedia, CardContent, Typography, Button, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
 const FeaturedCard = ({ title, description, image, link }) => (
-  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', boxShadow: 3 }}>
+  <Card
+    sx={{
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      boxShadow: 3,
+    }}
+  >
     <CardMedia component="img" height="160" image={image} alt={title} />
     <CardContent sx={{ flexGrow: 1 }}>
       <Typography variant="h6" fontWeight="bold" gutterBottom>
@@ -17,7 +31,7 @@ const FeaturedCard = ({ title, description, image, link }) => (
           to={link}
           variant="outlined"
           color="success"
-          sx={{ borderRadius: '999px' }}
+          sx={{ borderRadius: "999px" }}
         >
           Explore
         </Button>
