@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -7,7 +8,6 @@ import {
   Alert,
 } from "@mui/material";
 import { supabase } from "../supabaseClient";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const generateSlug = (text) =>
@@ -16,32 +16,40 @@ const generateSlug = (text) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-const AddHerbForm = () => {
+const AddProductForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     image_url: "",
-    healing_benefits: "",
-    recipe: "",
-    facts: "",
+    price: "",
+    description: "",
+    fulfillment_link: "",
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const slug = generateSlug(formData.name);
+
     const { error } = await supabase
-      .from("herbs")
+      .from("products")
       .insert([{ ...formData, slug }]);
-    if (error) setError("Failed to add herb.");
-    else {
+
+    if (error) {
+      console.error(error);
+      setError("Failed to add product.");
+    } else {
       setSuccess(true);
       setFormData({
         name: "",
         image_url: "",
-        healing_benefits: "",
-        recipe: "",
-        facts: "",
+        price: "",
+        description: "",
+        fulfillment_link: "",
       });
     }
   };
@@ -49,14 +57,14 @@ const AddHerbForm = () => {
   return (
     <Box sx={{ maxWidth: 600, mx: "auto", mt: 5 }}>
       <Typography variant="h4" gutterBottom>
-        Add New Herb
+        Add New Product
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
-          label="Name"
+          label="Product Name"
           name="name"
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={handleChange}
           fullWidth
           required
           sx={{ mb: 2 }}
@@ -65,20 +73,25 @@ const AddHerbForm = () => {
           label="Image URL"
           name="image_url"
           value={formData.image_url}
-          onChange={(e) =>
-            setFormData({ ...formData, image_url: e.target.value })
-          }
+          onChange={handleChange}
           fullWidth
           required
           sx={{ mb: 2 }}
         />
         <TextField
-          label="Healing Benefits"
-          name="healing_benefits"
-          value={formData.healing_benefits}
-          onChange={(e) =>
-            setFormData({ ...formData, healing_benefits: e.target.value })
-          }
+          label="Price"
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+          fullWidth
+          required
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          label="Description"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
           fullWidth
           multiline
           rows={3}
@@ -86,25 +99,11 @@ const AddHerbForm = () => {
           sx={{ mb: 2 }}
         />
         <TextField
-          label="Recipe"
-          name="recipe"
-          value={formData.recipe}
-          onChange={(e) => setFormData({ ...formData, recipe: e.target.value })}
+          label="Fulfillment Link"
+          name="fulfillment_link"
+          value={formData.fulfillment_link}
+          onChange={handleChange}
           fullWidth
-          multiline
-          rows={3}
-          required
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          label="Facts"
-          name="facts"
-          value={formData.facts}
-          onChange={(e) => setFormData({ ...formData, facts: e.target.value })}
-          fullWidth
-          multiline
-          rows={3}
-          required
           sx={{ mb: 2 }}
         />
 
@@ -112,24 +111,19 @@ const AddHerbForm = () => {
           <Box>
             <Button
               component={Link}
-              to="/admin/herbs"
+              to="/admin/products"
               variant="outlined"
               color="primary"
               sx={{ mr: 1 }}
             >
-              ← Back to Herb Dashboard
+              ← Back to Product Dashboard
             </Button>
-            <Button
-              component={Link}
-              to="/herbs"
-              variant="outlined"
-              color="info"
-            >
-              View Library
+            <Button component={Link} to="/shop" variant="outlined" color="info">
+              View Shop
             </Button>
           </Box>
           <Button type="submit" variant="contained" color="success">
-            Add Herb
+            Add Product
           </Button>
         </Box>
       </form>
@@ -139,17 +133,22 @@ const AddHerbForm = () => {
         autoHideDuration={3000}
         onClose={() => setSuccess(false)}
       >
-        <Alert severity="success">Herb added successfully!</Alert>
+        <Alert severity="success" onClose={() => setSuccess(false)}>
+          Product added successfully!
+        </Alert>
       </Snackbar>
+
       <Snackbar
         open={!!error}
         autoHideDuration={3000}
         onClose={() => setError("")}
       >
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error" onClose={() => setError("")}>
+          {error}
+        </Alert>
       </Snackbar>
     </Box>
   );
 };
 
-export default AddHerbForm;
+export default AddProductForm;

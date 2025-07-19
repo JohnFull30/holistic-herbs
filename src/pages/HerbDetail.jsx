@@ -1,29 +1,35 @@
 // src/pages/HerbDetail.jsx
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import {
-  Box, Typography, CardMedia, Accordion, AccordionSummary,
-  AccordionDetails, Button, Stack, Divider
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ShareIcon from '@mui/icons-material/Share';
-import herbs from '../data/herbs';
-import { Link } from 'react-router-dom';
-
+  Box,
+  Typography,
+  CardMedia,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
+  Stack,
+  Divider,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ShareIcon from "@mui/icons-material/Share";
+import herbs from "../data/herbs";
+import { Link } from "react-router-dom";
 
 const HerbDetail = () => {
   const { herbId } = useParams();
-  const herb = herbs.find(h => h.slug === herbId);
+  const herb = herbs.find((h) => h.slug === herbId);
 
   if (!herb) {
     return (
-      <Box sx={{ textAlign: 'center', mt: 5 }}>
+      <Box sx={{ textAlign: "center", mt: 5 }}>
         <Typography variant="h5">Herb not found!</Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ maxWidth: 900, mx: 'auto', my: 5 }}>
+    <Box sx={{ maxWidth: 900, mx: "auto", my: 5 }}>
       <CardMedia
         component="img"
         image={herb.image}
@@ -31,12 +37,20 @@ const HerbDetail = () => {
         sx={{ height: 400, borderRadius: 2 }}
       />
 
-      <Typography variant="h3" sx={{ my: 3 }}>{herb.name}</Typography>
+      <Typography variant="h3" sx={{ my: 3 }}>
+        {herb.name}
+      </Typography>
 
       <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle1"><strong>Scientific Name:</strong> {herb.scientificName}</Typography>
-        <Typography variant="subtitle1"><strong>Common Uses:</strong> {herb.commonUses}</Typography>
-        <Typography variant="subtitle1"><strong>Healing Benefits:</strong> {herb.healingBenefits}</Typography>
+        <Typography variant="subtitle1">
+          <strong>Scientific Name:</strong> {herb.scientificName}
+        </Typography>
+        <Typography variant="subtitle1">
+          <strong>Common Uses:</strong> {herb.commonUses}
+        </Typography>
+        <Typography variant="subtitle1">
+          <strong>Healing Benefits:</strong> {herb.healingBenefits}
+        </Typography>
       </Box>
 
       <Divider sx={{ my: 2 }} />
@@ -76,7 +90,11 @@ const HerbDetail = () => {
           <ul>
             {herb.productLinks.map((product, idx) => (
               <li key={idx}>
-                <Button component={Link} to={`/shop/${encodeURIComponent(product)}`} color="success">
+                <Button
+                  component={Link}
+                  to={`/shop/${encodeURIComponent(product)}`}
+                  color="success"
+                >
                   {product}
                 </Button>
               </li>
@@ -87,7 +105,9 @@ const HerbDetail = () => {
 
       <Divider sx={{ my: 4 }} />
 
-      <Typography variant="subtitle1" sx={{ mb: 1 }}>Share this herb:</Typography>
+      <Typography variant="subtitle1" sx={{ mb: 1 }}>
+        Share this herb:
+      </Typography>
       <Stack direction="row" spacing={2}>
         <Button
           startIcon={<ShareIcon />}

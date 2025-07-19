@@ -1,44 +1,54 @@
-import { Link } from 'react-router-dom';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
+// src/components/ProductCard.jsx
+import { Link } from "react-router-dom";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 const ProductCard = ({ name, price, image_url }) => (
-  <Box sx={{ position: 'relative' }}>
-    {/* Wrap only the product card in the Link */}
-    <Card
-  component={Link}
-  to={`/shop/${encodeURIComponent(name)}`}
-  sx={{
-    maxWidth: 345,
-    boxShadow: 3,
-    textDecoration: 'none',
-    color: 'inherit',
-    '&:hover': { boxShadow: 6 }
-  }}
->
-  <CardMedia component="img" height="240" image={image_url} alt={name} />
-  <CardContent sx={{ textAlign: 'center' }}> {/* 👈 Center content here */}
-    <Typography gutterBottom variant="h6">
-      {name}
-    </Typography>
-    <Typography variant="body2" color="text.secondary">
-      ${price}
-    </Typography>
-  </CardContent>
-</Card>
-
-
-    {/* Add to Cart Button BELOW the card */}
-    <Box sx={{ textAlign: 'center', mt: 1 }}>
-      <Button variant="contained" color="success" size="small">
+  <Card
+    component={Link}
+    to={`/shop/${encodeURIComponent(name)}`}
+    sx={{
+      textDecoration: "none",
+      color: "inherit",
+      maxWidth: 345,
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      boxShadow: 2,
+      borderRadius: 2,
+      transition: "0.2s",
+      "&:hover": { boxShadow: 4 },
+    }}
+  >
+    <CardMedia
+      component="img"
+      height="240"
+      image={image_url}
+      alt={name}
+      sx={{ objectFit: "cover" }}
+    />
+    <CardContent sx={{ textAlign: "center" }}>
+      <Typography gutterBottom variant="h6">
+        {name}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        ${price}
+      </Typography>
+      <Button
+        variant="contained"
+        color="success"
+        size="small"
+        onClick={(e) => e.preventDefault()} // Prevent navigating on button click
+        sx={{ borderRadius: "999px", textTransform: "none" }}
+      >
         Add to Cart
       </Button>
-    </Box>
-  </Box>
+    </CardContent>
+  </Card>
 );
 
 export default ProductCard;

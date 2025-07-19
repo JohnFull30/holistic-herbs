@@ -1,58 +1,129 @@
-// src/pages/HerbLibrary.jsx
-import { useState } from 'react';
-import { Box, Typography, Grid, TextField, Button, Card, CardMedia, CardContent } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  Box, Grid, TextField, Typography, Card, CardMedia, CardContent, Button
+} from '@mui/material';
+import { supabase } from '../supabaseClient';
 import { Link } from 'react-router-dom';
-import herbs from '../data/herbs';
-
 
 const HerbLibrary = () => {
-  const [search, setSearch] = useState("");
+  const [herbs, setHerbs] = useState([]);
+  const [search, setSearch] = useState('');
 
-  const filteredHerbs = herbs.filter(h =>
-    h.name.toLowerCase().includes(search.toLowerCase())
+  useEffect(() => {
+    const fetchHerbs = async () => {
+      const { data, error } = await supabase.from('herbs').select('*');
+      if (data) setHerbs(data);
+      else console.error(error);
+    };
+    fetchHerbs();
+  }, []);
+
+  const filteredHerbs = herbs.filter((herb) =>
+    herb.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const letters = [...new Set(herbs.map(h => h.name[0].toUpperCase()))].sort();
-
   return (
-    <Box sx={{ p: 4, pt: 12 }}>
-      <Typography variant="h3" align="center" gutterBottom>
-        Herb Library
-      </Typography>
-
-      <Box sx={{ maxWidth: 500, mx: 'auto', mb: 3 }}>
-        <TextField
-          fullWidth
+    <Box sx={{ px: { xs: 2, md: 4 }, py: 5 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
+        <Typography variant="h4">Herb Library</Typography>
+        <Button
+          component={Link}
+          to="/admin/herbs"
           variant="outlined"
-          placeholder="Search Herbs..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{ borderRadius: '50px', bgcolor: 'white' }}
-        />
+          color="success"
+        >
+          Admin Herb Dashboard
+        </Button>
       </Box>
 
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', mb: 4 }}>
-        {letters.map(letter => (
-          <Button
-            key={letter}
-            href={`#${letter}`}
-            size="small"
-            sx={{ m: 0.5 }}
+      <TextField
+        fullWidth
+        label="Search Herbs..."
+        variant="outlined"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        sx={{ mb: 4 }}
+      />
+
+      <Grid container spacing={4} justifyContent="center">
+        {filteredHerbs.map((herb) => (
+          <Grid
+            item
+            key={herb.id}
+            sx={{
+              flex: {
+                xs: "1 1 100%", // 1 card per row on mobile
+                sm: "1 1 48%", // 2 per row on small screens
+                md: "1 1 31%", // 3 per row on medium
+                lg: "1 1 23%", // 4 per row on large
+              },
+              maxWidth: {
+                xs: "100%",
+                sm: "48%",
+                md: "31%",
+                lg: "23%",
+              },
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
-            {letter}
-          </Button>
-        ))}
-      </Box>
+            <Card
+              component={Link}
+              to={`/learn/${herb.slug}`}
+              sx={{
+                textDecoration: "none",
+                color: "inherit",
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                width: "100%",
+                boxShadow: 2,
+                borderRadius: 2,
+                transition: "0.2s",
+                "&:hover": { boxShadow: 4 },
+              }}
+            >
+              {/* Image or Placeholder */}
+              {herb.image_url ? (
+                <CardMedia
+                  component="img"
+                  image={herb.image_url}
+                  alt={herb.name}
+                  sx={{ height: 160, objectFit: "cover" }}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    height: 160,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#e0e0e0",
+                    color: "#9e9e9e",
+                    fontWeight: "bold",
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  {herb.name}
+                </Box>
+              )}
 
-      <Grid container spacing={3}>
-        {filteredHerbs.map(herb => (
-          <Grid item xs={12} sm={6} md={4} key={herb.id} id={herb.name[0].toUpperCase()}>
-            <Card component={Link} to={`/herbs/${encodeURIComponent(herb.slug)}`} sx={{ textDecoration: 'none', boxShadow: 3, '&:hover': { boxShadow: 6 } }}>
-              <CardMedia component="img" height="200" image={herb.image} alt={herb.name} />
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold">{herb.name}</Typography>
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  {herb.name}
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {herb.description}
+                  {herb.healing_benefits
+                    ? herb.healing_benefits.slice(0, 90) +
+                      (herb.healing_benefits.length > 90 ? "…" : "")
+                    : "No description available."}
                 </Typography>
               </CardContent>
             </Card>
