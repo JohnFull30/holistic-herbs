@@ -52,24 +52,22 @@ const Shop = () => {
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Grid
           container
-          spacing={4}
+          spacing={3}
           justifyContent="center"
-          sx={{
-            width: "100%",
-            maxWidth: 1200,
-            mx: "auto",
-          }}
+          alignItems="stretch"
+          sx={{ maxWidth: 1200, mx: "auto" }}
         >
           {products.map((product) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              key={product.id}
-              sx={{ display: "flex", justifyContent: "center" }}
-            >
-              <ProductCard {...product} />
+            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <ProductCard {...product} />
+              </Box>
             </Grid>
           ))}
         </Grid>

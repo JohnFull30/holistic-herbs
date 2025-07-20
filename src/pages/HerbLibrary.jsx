@@ -93,15 +93,30 @@ const HerbLibrary = () => {
               {/* Image or Placeholder */}
               {herb.image_url ? (
                 <CardMedia
-                  component="img"
-                  image={herb.image_url}
-                  alt={herb.name}
-                  sx={{ height: 160, objectFit: "cover" }}
-                />
+                  component="div"
+                  sx={{
+                    height: 220,
+                    overflow: "hidden",
+                    borderTopLeftRadius: 8,
+                    borderTopRightRadius: 8,
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={herb.image_url}
+                    alt={herb.name}
+                    sx={{
+                      height: "100%",
+                      width: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                  />
+                </CardMedia>
               ) : (
                 <Box
                   sx={{
-                    height: 160,
+                    height: 180,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

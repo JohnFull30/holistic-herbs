@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import {
   Typography,
   Box,
-  CardMedia,
   Divider,
   Button,
   CircularProgress,
@@ -71,18 +70,27 @@ const HerbInfo = () => {
       <Typography variant="h3" gutterBottom>
         {herb.name}
       </Typography>
-      <CardMedia
-        component="img"
-        image={herb.image_url}
-        alt={herb.name}
+      <Box
         sx={{
-          maxHeight: 400,
-          width: "100%",
-          borderRadius: 2,
-          objectFit: "cover",
+          display: "flex",
+          justifyContent: "center",
           mb: 3,
         }}
-      />
+      >
+        <Box
+          component="img"
+          src={herb.image_url}
+          alt={herb.name}
+          sx={{
+            maxWidth: "100%",
+            width: "100%",
+            maxHeight: 500,
+            objectFit: "contain",
+            borderRadius: 2,
+          }}
+        />
+      </Box>
+
       <Typography variant="h5" color="success.main">
         Healing Benefits
       </Typography>

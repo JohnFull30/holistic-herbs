@@ -29,6 +29,17 @@ const theme = createTheme({
     h2: { fontWeight: 700, fontSize: "3rem", letterSpacing: "-1px" },
     h5: { color: "#555" },
   },
+  components: {
+    MuiCardMedia: {
+      styleOverrides: {
+        root: {
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        },
+      },
+    },
+  },
 });
 
 function App() {
