@@ -15,6 +15,9 @@ import "./App.css";
 import HerbDashboard from "./pages/HerbDashboard";
 import ProductDashboard from "./pages/ProductDashboard";
 import AddProductForm from "./pages/AddProductForm";
+import AddAdminRemedyForm from "./pages/AddAdminRemedyForm";
+import RecipeRemedyList from "./pages/RecipeRemedyList";
+import RemedyDashboard from "./pages/RemedyDashboard";
 
 import { ThemeProvider, createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -48,25 +51,27 @@ function App() {
       <CssBaseline />
       <Router>
         <Navbar />
-          <Box sx={{ px: { xs: 2, md: 4 }, pt: { xs: 8, sm: 10 }, maxWidth: "100%" }}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/learn" element={<Learn />} />
-              <Route
-                path="/shop/:productId"
-                element={<ProductDetails />}
-              />{" "}
-              {/* New route */}
-              <Route path="/learn/:herbName" element={<HerbInfo />} />
-              <Route path="/herbs" element={<HerbLibrary />} />
-              <Route path="/herbs/:herbId" element={<HerbDetail />} />
-              <Route path="/admin/add-herb" element={<AddHerbForm />} />
-              <Route path="/admin/herbs" element={<HerbDashboard />} />
-              <Route path="/admin/products" element={<ProductDashboard />} />
-              <Route path="/admin/add-product" element={<AddProductForm />} />
-            </Routes>
-          </Box>
+        <Box
+          sx={{ px: { xs: 2, md: 4 }, pt: { xs: 8, sm: 10 }, maxWidth: "100%" }}
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/learn" element={<Learn />} />
+            <Route path="/shop/:productId" element={<ProductDetails />} />{" "}
+            {/* New route */}
+            <Route path="/learn/:herbName" element={<HerbInfo />} />
+            <Route path="/herbs" element={<HerbLibrary />} />
+            <Route path="/herbs/:herbId" element={<HerbDetail />} />
+            <Route path="/admin/add-herb" element={<AddHerbForm />} />
+            <Route path="/admin/herbs" element={<HerbDashboard />} />
+            <Route path="/admin/products" element={<ProductDashboard />} />
+            <Route path="/admin/add-product" element={<AddProductForm />} />
+            <Route path="/admin/add-remedy" element={<AddAdminRemedyForm />} />
+            <Route path="/learn/recipes" element={<RecipeRemedyList />} />
+            <Route path="/admin/remedies" element={<RemedyDashboard />} />
+          </Routes>
+        </Box>
         <Footer />
       </Router>
     </ThemeProvider>
