@@ -30,45 +30,58 @@ const AddAdminRemedyForm = () => {
     instructions: "",
     safe_for_kids: false,
     safe_for_pets: false,
-    herb_slug: "",
+    herb_slug: null,
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const { name, value, type, checked } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: type === "checkbox" ? checked : value === "" ? null : value,
+  }));
+  };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const slug = generateSlug(formData.title);
+
+  // Create a shallow copy without herb_slug
+  const { herb_slug, ...rest } = formData;
+
+  // Build payload only adding herb_slug if it’s non-empty
+  const payload = {
+    ...rest,
+    slug,
+  };
+
+  if (typeof herb_slug === "string" && herb_slug.trim() !== "") {
+    payload.herb_slug = herb_slug.trim();
+  }
+
+
+  const { error } = await supabase.from("remedies").insert([payload]);
+  if (error) {
+    console.error(error);
+    setError("Failed to add entry.");
+  } else {
+    setSuccess(true);
     setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      title: "",
+      image_url: "",
+      type: "recipe",
+      problem_solved: "",
+      healing_purpose: "",
+      ingredients: "",
+      instructions: "",
+      safe_for_kids: false,
+      safe_for_pets: false,
+      herb_slug: undefined, // not "" or null
     });
-  };
+  }
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const slug = generateSlug(formData.title);
-
-    const { error } = await supabase
-      .from("remedies")
-      .insert([{ ...formData, slug }]);
-    if (error) {
-      console.error(error);
-      setError("Failed to add entry.");
-    } else {
-      setSuccess(true);
-      setFormData({
-        title: "",
-        image_url: "",
-        type: "recipe",
-        problem_solved: "",
-        healing_purpose: "",
-        ingredients: "",
-        instructions: "",
-        safe_for_kids: false,
-        safe_for_pets: false,
-        herb_slug: "",
-      });
-    }
-  };
 
   return (
     <Box sx={{ maxWidth: 700, mx: "auto", mt: 5 }}>
@@ -144,14 +157,16 @@ const AddAdminRemedyForm = () => {
           required
           sx={{ mb: 2 }}
         />
-        <TextField
-          fullWidth
-          label="Linked Herb Slug (optional)"
-          name="herb_slug"
-          value={formData.herb_slug}
-          onChange={handleChange}
-          sx={{ mb: 2 }}
-        />
+        {formData.herb_slug !== undefined && (
+          <TextField
+            fullWidth
+            label="Linked Herb Slug (optional)"
+            name="herb_slug"
+            value={formData.herb_slug || ""}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          />
+        )}
         <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
           <FormControlLabel
             control={

@@ -18,6 +18,7 @@ import AddProductForm from "./pages/AddProductForm";
 import AddAdminRemedyForm from "./pages/AddAdminRemedyForm";
 import RecipeRemedyList from "./pages/RecipeRemedyList";
 import RemedyDashboard from "./pages/RemedyDashboard";
+import RemedyDetail from "./pages/RemedyDetail";
 
 import { ThemeProvider, createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -70,6 +71,7 @@ function App() {
             <Route path="/admin/add-remedy" element={<AddAdminRemedyForm />} />
             <Route path="/learn/recipes" element={<RecipeRemedyList />} />
             <Route path="/admin/remedies" element={<RemedyDashboard />} />
+            <Route path="/learn/recipes/:slug" element={<RemedyDetail />} />
           </Routes>
         </Box>
         <Footer />

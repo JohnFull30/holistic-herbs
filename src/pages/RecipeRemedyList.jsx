@@ -22,9 +22,14 @@ const RecipeRemedyList = () => {
   useEffect(() => {
     const fetchEntries = async () => {
       const { data, error } = await supabase.from("remedies").select("*");
-      if (error) console.error("Failed to fetch remedies:", error);
-      else setEntries(data);
+      if (error) {
+        console.error("❌ Supabase error:", error);
+      } else {
+        console.log("✅ Loaded remedies:", data);
+        setEntries(data);
+      }
     };
+
     fetchEntries();
   }, []);
 
@@ -35,21 +40,12 @@ const RecipeRemedyList = () => {
       entry.healing_purpose?.toLowerCase().includes(search.toLowerCase());
 
     const matchesType = filter === "all" || entry.type === filter;
-
     return matchesSearch && matchesType;
   });
 
   return (
     <Box sx={{ px: 3, py: 5 }}>
-      {/* Header and Admin button */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 3,
-        }}
-      >
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4">Herbal Recipes & Remedies</Typography>
         <Button
           component={Link}
@@ -57,67 +53,59 @@ const RecipeRemedyList = () => {
           variant="outlined"
           color="secondary"
         >
-          Admin Add Entry
+          Admin Remedy Dashboard
         </Button>
       </Box>
 
-      {/* Tabs and Search */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          gap: 2,
-          mb: 4,
-        }}
-      >
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 4 }}>
         <Tabs
           value={filter}
-          onChange={(e, newValue) => setFilter(newValue)}
+          onChange={(e, newVal) => setFilter(newVal)}
           textColor="primary"
           indicatorColor="primary"
-          sx={{ borderBottom: 1, borderColor: "divider" }}
         >
-          <Tab label="All" value="all" />
-          <Tab label="Medicinal Recipes" value="recipe" />
-          <Tab label="Natural Remedies" value="remedy" />
+          <Tab value="all" label="All" />
+          <Tab value="recipe" label="Medicinal Recipes" />
+          <Tab value="remedy" label="Natural Remedies" />
         </Tabs>
-
         <TextField
+          fullWidth
           label="Search entries..."
-          variant="outlined"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          fullWidth
         />
       </Box>
 
-      {/* Grid of entries */}
-      <Grid container spacing={3}>
-        {filtered.map((entry) => (
-          <Grid item xs={12} sm={6} md={4} key={entry.slug}>
-            <Card
-              component={Link}
-              to={`/learn/recipes/${entry.slug}`}
-              sx={{ textDecoration: "none" }}
-            >
-              <CardMedia
-                component="img"
-                height="160"
-                image={entry.image_url}
-                alt={entry.title}
-              />
-              <CardContent>
-                <Typography variant="h6">{entry.title}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {entry.problem_solved ||
-                    entry.healing_purpose ||
-                    "Holistic knowledge for everyday healing"}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+      {filtered.length === 0 ? (
+        <Typography>No results found.</Typography>
+      ) : (
+        <Grid container spacing={3}>
+          {filtered.map((entry) => (
+            <Grid item xs={12} sm={6} md={4} key={entry.slug}>
+              <Card
+                component={Link}
+                to={`/learn/recipes/${entry.slug}`}
+                sx={{ textDecoration: "none", "&:hover": { boxShadow: 4 } }}
+              >
+                <CardMedia
+                  component="img"
+                  height="160"
+                  image={entry.image_url}
+                  alt={entry.title}
+                />
+                <CardContent>
+                  <Typography variant="h6">{entry.title}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {entry.problem_solved ||
+                      entry.healing_purpose ||
+                      "Holistic wisdom"}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 };
