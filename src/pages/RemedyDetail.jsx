@@ -17,6 +17,8 @@ const RemedyDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+     if (!slug) return;
+     
     const fetchEntry = async () => {
       const { data, error } = await supabase
         .from("remedies")

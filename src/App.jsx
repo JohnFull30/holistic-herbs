@@ -58,9 +58,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
-            <Route path="/learn" element={<Learn />} />
             <Route path="/shop/:productId" element={<ProductDetails />} />{" "}
             {/* New route */}
+            <Route path="/learn" element={<Learn />} />
             <Route path="/learn/:herbName" element={<HerbInfo />} />
             <Route path="/herbs" element={<HerbLibrary />} />
             <Route path="/herbs/:herbId" element={<HerbDetail />} />
@@ -69,9 +69,9 @@ function App() {
             <Route path="/admin/products" element={<ProductDashboard />} />
             <Route path="/admin/add-product" element={<AddProductForm />} />
             <Route path="/admin/add-remedy" element={<AddAdminRemedyForm />} />
+            <Route path="/learn/recipes/:slug" element={<RemedyDetail />} />
             <Route path="/learn/recipes" element={<RecipeRemedyList />} />
             <Route path="/admin/remedies" element={<RemedyDashboard />} />
-            <Route path="/learn/recipes/:slug" element={<RemedyDetail />} />
           </Routes>
         </Box>
         <Footer />
