@@ -1,45 +1,45 @@
-// src/components/ProductCard.jsx
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  Button,
-  Box,
-} from "@mui/material";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
 const ProductCard = ({ name, price, image_url }) => (
-  <Box
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      textAlign: "center",
-      width: "100%",
-    }}
-  >
+  <Box sx={{ position: "relative", width: "100%", maxWidth: 345 }}>
     <Card
       component={Link}
       to={`/shop/${encodeURIComponent(name)}`}
       sx={{
         width: "100%",
-        maxWidth: 300,
+        boxShadow: 3,
         textDecoration: "none",
         color: "inherit",
-        boxShadow: 3,
+        borderRadius: 2,
+        overflow: "hidden",
         "&:hover": { boxShadow: 6 },
       }}
     >
       <CardMedia
         component="img"
-        height="220"
         image={image_url}
         alt={name}
-        sx={{ objectFit: "cover" }}
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = `${process.env.PUBLIC_URL}/images/herb-library-thumbnail.jpg`;
+        }}
+        sx={{
+          width: "100%",
+          height: 280,
+          objectFit: "cover",
+          display: "block",
+          backgroundColor: "#f6f6f6",
+        }}
       />
-      <CardContent>
-        <Typography gutterBottom variant="h6" fontWeight="bold">
+
+      <CardContent sx={{ textAlign: "center", minHeight: 100 }}>
+        <Typography gutterBottom variant="h6">
           {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -48,14 +48,11 @@ const ProductCard = ({ name, price, image_url }) => (
       </CardContent>
     </Card>
 
-    <Button
-      variant="contained"
-      color="success"
-      size="small"
-      sx={{ mt: 1, borderRadius: "999px", textTransform: "none" }}
-    >
-      Add to Cart
-    </Button>
+    <Box sx={{ textAlign: "center", mt: 1 }}>
+      <Button variant="contained" color="success" size="small">
+        Add to Cart
+      </Button>
+    </Box>
   </Box>
 );
 

@@ -1,11 +1,12 @@
 import { Box, Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => (
   <Box
     component="section"
     sx={{
-      width: "100%", // Full viewport width
-      minHeight: "60dvh", // Full viewport height
+      width: "100%",
+      minHeight: "60dvh",
       position: "relative",
       overflow: "hidden",
       backgroundImage: `url(${process.env.PUBLIC_URL}/images/learn-hero.jpg)`,
@@ -21,7 +22,6 @@ const HeroSection = () => (
       p: 0,
     }}
   >
-    {/* Overlay */}
     <Box
       sx={{
         position: "absolute",
@@ -33,7 +33,6 @@ const HeroSection = () => (
       }}
     />
 
-    {/* Content */}
     <Box
       sx={{
         position: "relative",
@@ -63,6 +62,8 @@ const HeroSection = () => (
       </Typography>
 
       <Button
+        component={Link}
+        to="/herbs"
         variant="contained"
         size="large"
         sx={{
@@ -71,6 +72,7 @@ const HeroSection = () => (
           py: 1.5,
           backgroundColor: "#2f6e41",
           fontWeight: "bold",
+          textDecoration: "none",
           "&:hover": {
             backgroundColor: "#245733",
           },

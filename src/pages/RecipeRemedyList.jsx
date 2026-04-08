@@ -22,25 +22,41 @@ const RecipeRemedyList = () => {
   useEffect(() => {
     const fetchEntries = async () => {
       const { data, error } = await supabase.from("remedies").select("*");
-      if (error) console.error("❌ Supabase error:", error);
-      else setEntries(data);
+
+      if (error) {
+        console.error("❌ Supabase error:", error);
+      } else {
+        setEntries(data || []);
+      }
     };
+
     fetchEntries();
   }, []);
 
   const filtered = entries.filter((entry) => {
     const matchesSearch =
-      entry.title.toLowerCase().includes(search.toLowerCase()) ||
+      entry.title?.toLowerCase().includes(search.toLowerCase()) ||
       entry.problem_solved?.toLowerCase().includes(search.toLowerCase()) ||
       entry.healing_purpose?.toLowerCase().includes(search.toLowerCase());
+
     const matchesType = filter === "all" || entry.type === filter;
     return matchesSearch && matchesType;
   });
 
   return (
     <Box sx={{ px: 3, py: 5 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+          flexWrap: "wrap",
+          gap: 2,
+        }}
+      >
         <Typography variant="h4">Herbal Recipes & Remedies</Typography>
+
         <Button
           component={Link}
           to="/admin/remedies"
@@ -57,11 +73,14 @@ const RecipeRemedyList = () => {
           onChange={(e, newVal) => setFilter(newVal)}
           textColor="primary"
           indicatorColor="primary"
+          variant="scrollable"
+          scrollButtons="auto"
         >
           <Tab value="all" label="All" />
           <Tab value="recipe" label="Medicinal Recipes" />
           <Tab value="remedy" label="Natural Remedies" />
         </Tabs>
+
         <TextField
           fullWidth
           label="Search entries..."
@@ -93,13 +112,15 @@ const RecipeRemedyList = () => {
                   boxShadow: 3,
                   "&:hover": { boxShadow: 6 },
                   textDecoration: "none",
+                  color: "inherit",
+                  borderRadius: 2,
+                  overflow: "hidden",
                 }}
               >
-                {/* Liquid Glass Pill Title Overlay */}
                 <Box
                   sx={{
                     position: "absolute",
-                    top: -12,
+                    top: 12,
                     left: "50%",
                     transform: "translateX(-50%)",
                     backdropFilter: "blur(16px)",
@@ -109,6 +130,7 @@ const RecipeRemedyList = () => {
                     px: 3,
                     py: 0.75,
                     zIndex: 2,
+                    maxWidth: "85%",
                   }}
                 >
                   <Typography
@@ -119,6 +141,7 @@ const RecipeRemedyList = () => {
                       color: "#fff",
                       textAlign: "center",
                       textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+                      lineHeight: 1.3,
                     }}
                   >
                     {entry.title}
@@ -127,16 +150,25 @@ const RecipeRemedyList = () => {
 
                 <CardMedia
                   component="img"
-                  height="180"
                   image={
                     entry.image_url ||
-                    `${process.env.PUBLIC_URL}/images/default-remedy.jpg`
+                    `${process.env.PUBLIC_URL}/images/herb-library-thumbnail.jpg`
                   }
                   alt={entry.title}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = `${process.env.PUBLIC_URL}/images/herb-library-thumbnail.jpg`;
+                  }}
+                  sx={{
+                    width: "100%",
+                    height: 220,
+                    objectFit: "cover",
+                    display: "block",
+                    backgroundColor: "#f4f4f4",
+                  }}
                 />
 
-                {/* Centered Card Content with Title and Description */}
-                <CardContent sx={{ textAlign: "center" }}>
+                <CardContent sx={{ textAlign: "center", minHeight: 110 }}>
                   <Typography
                     variant="subtitle1"
                     fontWeight="bold"
@@ -144,6 +176,7 @@ const RecipeRemedyList = () => {
                   >
                     {entry.title}
                   </Typography>
+
                   <Typography variant="body2" color="text.secondary">
                     {entry.problem_solved ||
                       entry.healing_purpose ||
